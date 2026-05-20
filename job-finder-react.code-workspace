@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../job-finder-backend-customized"
+			"path": "../job-finder-backend-node"
 		},
 		{
 			"path": "../job-finder-backend-go"
