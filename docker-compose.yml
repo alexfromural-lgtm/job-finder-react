@@ -8,12 +8,10 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+    networks:
+      - backend-network
 
-# ─── Optional: uncomment to connect to a backend on the same compose network ──
-# networks:
-#   - job-finder-net
-#
-# networks:
-#   job-finder-net:
-#     external: true          # share this network with your backend compose stack
-#     name: job-finder-net
+networks:
+  backend-network:
+    external: true
+    name: job-finder-backend-node_job-network
