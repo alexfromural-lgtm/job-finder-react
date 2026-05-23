@@ -1,0 +1,19 @@
+services:
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: job-finder-react:latest
+    container_name: job-finder-ui
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+# ─── Optional: uncomment to connect to a backend on the same compose network ──
+# networks:
+#   - job-finder-net
+#
+# networks:
+#   job-finder-net:
+#     external: true          # share this network with your backend compose stack
+#     name: job-finder-net
