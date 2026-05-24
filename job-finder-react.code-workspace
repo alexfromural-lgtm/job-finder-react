@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../job-finder-backend-java"
+		},
+		{
+			"path": "../job-finder-backend-python"
 		}
 	],
 	"settings": {}
