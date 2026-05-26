@@ -50,7 +50,9 @@ export default function Pagination({
     >
       {/* ── Left: count + page size ─────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
+        <span
+          style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}
+        >
           {scrollMode
             ? hasMore
               ? `Showing ${endItem} of ${totalItems}`
@@ -67,10 +69,17 @@ export default function Pagination({
             className="input"
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
-            style={{ width: 'auto', padding: '0.25rem 0.5rem', fontSize: '0.82rem', marginBottom: 0 }}
+            style={{
+              width: 'auto',
+              padding: '0.25rem 0.5rem',
+              fontSize: '0.82rem',
+              marginBottom: 0,
+            }}
           >
             {PAGE_SIZES.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
@@ -92,7 +101,11 @@ export default function Pagination({
             p === '…' ? (
               <span
                 key={`ell-${i}`}
-                style={{ color: 'var(--color-text-muted)', padding: '0 0.1rem', lineHeight: '32px' }}
+                style={{
+                  color: 'var(--color-text-muted)',
+                  padding: '0 0.1rem',
+                  lineHeight: '32px',
+                }}
               >
                 …
               </span>
@@ -106,7 +119,7 @@ export default function Pagination({
               >
                 {p}
               </PageBtn>
-            ),
+            )
           )}
 
           <PageBtn
@@ -131,10 +144,20 @@ export default function Pagination({
           gap: 3,
         }}
       >
-        <ModeBtn id="mode-pagination" active={!scrollMode} onClick={() => onScrollModeToggle(false)} title="Pagination mode">
+        <ModeBtn
+          id="mode-pagination"
+          active={!scrollMode}
+          onClick={() => onScrollModeToggle(false)}
+          title="Pagination mode"
+        >
           ☰ Pages
         </ModeBtn>
-        <ModeBtn id="mode-infinite-scroll" active={scrollMode} onClick={() => onScrollModeToggle(true)} title="Infinite scroll mode">
+        <ModeBtn
+          id="mode-infinite-scroll"
+          active={scrollMode}
+          onClick={() => onScrollModeToggle(true)}
+          title="Infinite scroll mode"
+        >
           ↓ Scroll
         </ModeBtn>
       </div>
@@ -153,7 +176,14 @@ interface PageBtnProps {
   'aria-label'?: string;
 }
 
-function PageBtn({ id, onClick, disabled, active, children, 'aria-label': ariaLabel }: PageBtnProps) {
+function PageBtn({
+  id,
+  onClick,
+  disabled,
+  active,
+  children,
+  'aria-label': ariaLabel,
+}: PageBtnProps) {
   const style: CSSProperties = {
     minWidth: 32,
     height: 32,

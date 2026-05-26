@@ -12,10 +12,24 @@ export default function JobSeekerDashboard() {
   usePageTitle('Dashboard');
 
   const {
-    search, categoryFilter, page, pageSize, scrollMode,
-    categories, meta, displayJobs, hasMore,
-    loading, loadingMore, error,
-    setSearch, setCategoryFilter, setPage, setPageSize, setScrollMode, loadMore,
+    search,
+    categoryFilter,
+    page,
+    pageSize,
+    scrollMode,
+    categories,
+    meta,
+    displayJobs,
+    hasMore,
+    loading,
+    loadingMore,
+    error,
+    setSearch,
+    setCategoryFilter,
+    setPage,
+    setPageSize,
+    setScrollMode,
+    loadMore,
   } = useJobSearch();
 
   return (
@@ -25,9 +39,15 @@ export default function JobSeekerDashboard() {
         <div
           className="glass-strong"
           style={{
-            borderRadius: 'var(--radius-xl)', padding: '2rem', marginBottom: '2rem',
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            flexWrap: 'wrap', gap: '1rem', animation: 'slideUp 0.3s ease',
+            borderRadius: 'var(--radius-xl)',
+            padding: '2rem',
+            marginBottom: '2rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            animation: 'slideUp 0.3s ease',
           }}
         >
           <div>
@@ -39,7 +59,14 @@ export default function JobSeekerDashboard() {
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <div className="glass" style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+            <div
+              className="glass"
+              style={{
+                padding: '0.75rem 1.25rem',
+                borderRadius: 'var(--radius-md)',
+                textAlign: 'center',
+              }}
+            >
               <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--color-primary)' }}>
                 {meta.total}
               </div>
@@ -52,9 +79,13 @@ export default function JobSeekerDashboard() {
         <div
           className="glass"
           style={{
-            display: 'flex', gap: '1rem', padding: '1rem 1.5rem',
-            borderRadius: 'var(--radius-lg)', marginBottom: '1.5rem',
-            alignItems: 'center', flexWrap: 'wrap',
+            display: 'flex',
+            gap: '1rem',
+            padding: '1rem 1.5rem',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: '1.5rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
           }}
         >
           <input
@@ -75,7 +106,9 @@ export default function JobSeekerDashboard() {
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
           )}
@@ -84,7 +117,10 @@ export default function JobSeekerDashboard() {
               id="seeker-clear-filters"
               variant="ghost"
               size="sm"
-              onClick={() => { setSearch(''); setCategoryFilter(''); }}
+              onClick={() => {
+                setSearch('');
+                setCategoryFilter('');
+              }}
             >
               Clear
             </Button>
@@ -92,16 +128,29 @@ export default function JobSeekerDashboard() {
         </div>
 
         {/* Heading */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1.25rem',
+          }}
+        >
           <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>
-            {loading ? 'Loading jobs…' : `${meta.total} Available Job${meta.total !== 1 ? 's' : ''}`}
+            {loading
+              ? 'Loading jobs…'
+              : `${meta.total} Available Job${meta.total !== 1 ? 's' : ''}`}
           </h2>
           <Button id="browse-all-btn" variant="ghost" size="sm" onClick={() => navigate('/')}>
             Browse All →
           </Button>
         </div>
 
-        {error && <div className="alert alert-error" style={{ marginBottom: '1rem' }}>{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
 
         <JobList
           jobs={displayJobs}

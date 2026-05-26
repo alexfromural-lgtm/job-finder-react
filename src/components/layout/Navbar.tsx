@@ -29,42 +29,65 @@ export default function Navbar() {
 
           {/* Desktop links */}
           <div className="navbar-links" style={{ display: 'flex' }}>
-            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
+            <NavLink
+              to="/"
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              end
+            >
               Browse Jobs
             </NavLink>
 
             {isAuthenticated && hasRole('JOB_SEEKER') && (
-              <NavLink to="/dashboard/seeker" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/dashboard/seeker"
+                end
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 My Dashboard
               </NavLink>
             )}
 
             {isAuthenticated && hasRole('JOB_SEEKER') && (
-              <NavLink to="/dashboard/seeker/applications" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/dashboard/seeker/applications"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 My Applications
               </NavLink>
             )}
 
             {isAuthenticated && hasRole('JOB_SEEKER') && (
-              <NavLink to="/dashboard/seeker/saved" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/dashboard/seeker/saved"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 Saved Jobs
               </NavLink>
             )}
 
             {isAuthenticated && hasRole('JOB_SEEKER') && (
-              <NavLink to="/profile/seeker" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/profile/seeker"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 My Profile
               </NavLink>
             )}
 
             {isAuthenticated && hasRole('RECRUITER') && (
-              <NavLink to="/dashboard/recruiter" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/dashboard/recruiter"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 My Jobs
               </NavLink>
             )}
 
             {isAuthenticated && hasRole('RECRUITER') && (
-              <NavLink to="/profile/recruiter" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink
+                to="/profile/recruiter"
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+              >
                 My Profile
               </NavLink>
             )}
@@ -73,7 +96,14 @@ export default function Navbar() {
               // Placeholder keeps the navbar height stable while session resolves
               <div style={{ width: 120, height: 32 }} />
             ) : isAuthenticated ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '0.5rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  marginLeft: '0.5rem',
+                }}
+              >
                 <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                   👤 {user?.name}
                 </span>

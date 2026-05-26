@@ -56,7 +56,15 @@ export default function SavedJobsPage() {
             animation: 'slideUp 0.3s ease',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
             <div>
               <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.6rem', fontWeight: 800 }}>
                 🔖 Saved Jobs
@@ -67,11 +75,27 @@ export default function SavedJobsPage() {
             </div>
 
             {/* Count chip */}
-            <div className="glass" style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', textAlign: 'center', minWidth: 72 }}>
+            <div
+              className="glass"
+              style={{
+                padding: '0.75rem 1.25rem',
+                borderRadius: 'var(--radius-md)',
+                textAlign: 'center',
+                minWidth: 72,
+              }}
+            >
               <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--color-primary)' }}>
                 {savedJobs.length}
               </div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '0.1rem' }}>Saved</div>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  color: 'var(--color-text-muted)',
+                  marginTop: '0.1rem',
+                }}
+              >
+                Saved
+              </div>
             </div>
           </div>
 
@@ -85,18 +109,17 @@ export default function SavedJobsPage() {
             >
               ← Back to Dashboard
             </Button>
-            <Button
-              id="browse-jobs-btn"
-              variant="primary"
-              size="sm"
-              onClick={() => navigate('/')}
-            >
+            <Button id="browse-jobs-btn" variant="primary" size="sm" onClick={() => navigate('/')}>
               Browse Jobs →
             </Button>
           </div>
         </div>
 
-        {error && <div className="alert alert-error" style={{ marginBottom: '1rem' }}>{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
 
         {/* Content */}
         {loading ? (
@@ -114,8 +137,12 @@ export default function SavedJobsPage() {
             }}
           >
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏷️</div>
-            <p style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem' }}>No saved jobs yet</p>
-            <p style={{ color: 'var(--color-text-muted)', margin: '0 0 1.5rem', fontSize: '0.9rem' }}>
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem' }}>
+              No saved jobs yet
+            </p>
+            <p
+              style={{ color: 'var(--color-text-muted)', margin: '0 0 1.5rem', fontSize: '0.9rem' }}
+            >
               Bookmark jobs from the job detail page to keep track of them here.
             </p>
             <Button id="find-jobs-btn" variant="primary" onClick={() => navigate('/')}>
@@ -170,7 +197,14 @@ function SavedJobCard({ saved, unsaving, onView, onUnsave }: SavedJobCardProps) 
         </h3>
 
         {job?.recruiter?.companyName && (
-          <p style={{ margin: '0 0 0.5rem', fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+          <p
+            style={{
+              margin: '0 0 0.5rem',
+              fontSize: '0.82rem',
+              color: 'var(--color-text-muted)',
+              fontWeight: 500,
+            }}
+          >
             🏢 {job.recruiter.companyName}
           </p>
         )}
@@ -183,7 +217,12 @@ function SavedJobCard({ saved, unsaving, onView, onUnsave }: SavedJobCardProps) 
         </div>
 
         <p style={{ margin: '0.4rem 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-          Saved {new Date(saved.savedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+          Saved{' '}
+          {new Date(saved.savedAt).toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
         </p>
       </div>
 

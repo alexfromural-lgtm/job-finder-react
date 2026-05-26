@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
@@ -25,7 +25,9 @@
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -37,7 +39,12 @@ body {
   margin: 0;
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -252,13 +259,41 @@ select.input option:hover {
   letter-spacing: 0.03em;
 }
 
-.badge-blue   { background: rgba(79, 142, 247, 0.15); color: var(--color-primary); border: 1px solid rgba(79, 142, 247, 0.25); }
-.badge-teal   { background: rgba(6, 182, 212, 0.15); color: var(--color-secondary); border: 1px solid rgba(6, 182, 212, 0.25); }
-.badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--color-accent); border: 1px solid rgba(168, 85, 247, 0.25); }
-.badge-green  { background: rgba(34, 197, 94, 0.15); color: var(--color-success); border: 1px solid rgba(34, 197, 94, 0.25); }
-.badge-red    { background: rgba(239, 68, 68, 0.15); color: var(--color-danger); border: 1px solid rgba(239, 68, 68, 0.25); }
-.badge-yellow { background: rgba(245, 158, 11, 0.15); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.25); }
-.badge-gray   { background: rgba(136, 153, 187, 0.12); color: var(--color-text-muted); border: 1px solid rgba(136, 153, 187, 0.2); }
+.badge-blue {
+  background: rgba(79, 142, 247, 0.15);
+  color: var(--color-primary);
+  border: 1px solid rgba(79, 142, 247, 0.25);
+}
+.badge-teal {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--color-secondary);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+.badge-purple {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--color-accent);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.badge-green {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+.badge-red {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+.badge-yellow {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.badge-gray {
+  background: rgba(136, 153, 187, 0.12);
+  color: var(--color-text-muted);
+  border: 1px solid rgba(136, 153, 187, 0.2);
+}
 
 /* ─── Cards ─────────────────────────────────────────────────────────────────── */
 .card {
@@ -467,22 +502,39 @@ select.input option:hover {
 
 /* ─── Animations ────────────────────────────────────────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 /* ─── Responsive ────────────────────────────────────────────────────────────── */

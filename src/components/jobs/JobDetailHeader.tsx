@@ -37,13 +37,30 @@ export default function JobDetailHeader({
         animation: 'slideUp 0.3s ease',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}
+      >
         <div style={{ flex: 1 }}>
-          <h1 style={{ margin: '0 0 0.5rem', fontSize: '1.7rem', fontWeight: 800, lineHeight: 1.2 }}>
+          <h1
+            style={{ margin: '0 0 0.5rem', fontSize: '1.7rem', fontWeight: 800, lineHeight: 1.2 }}
+          >
             {job.title}
           </h1>
           {job.recruiter?.companyName && (
-            <p style={{ margin: '0 0 1rem', color: 'var(--color-text-muted)', fontWeight: 500, fontSize: '1rem' }}>
+            <p
+              style={{
+                margin: '0 0 1rem',
+                color: 'var(--color-text-muted)',
+                fontWeight: 500,
+                fontSize: '1rem',
+              }}
+            >
               🏢 {job.recruiter.companyName}
               {job.recruiter.industry && ` · ${job.recruiter.industry}`}
             </p>
@@ -70,7 +87,15 @@ export default function JobDetailHeader({
             onSaveClick={onSaveClick}
           />
           {saveError && (
-            <p style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--color-error, #f87171)', textAlign: 'right', maxWidth: 220 }}>
+            <p
+              style={{
+                marginTop: '0.5rem',
+                fontSize: '0.75rem',
+                color: 'var(--color-error, #f87171)',
+                textAlign: 'right',
+                maxWidth: 220,
+              }}
+            >
               ⚠ {saveError}
             </p>
           )}
@@ -79,4 +104,3 @@ export default function JobDetailHeader({
     </div>
   );
 }
-

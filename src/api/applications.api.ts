@@ -17,21 +17,19 @@ export interface QueuedResponse {
  * Returns a queue job ID immediately (202 Accepted). Use pollUntilDone()
  * from queue.api.ts to wait for the actual result.
  */
-export const applyToJob = async (
-  jobId: string,
-  coverLetter?: string,
-): Promise<QueuedResponse> => {
-  const { data } = await axiosClient.post<QueuedResponse>(
-    `/jobseeker/apply/${jobId}`,
-    { coverLetter },
-  );
+export const applyToJob = async (jobId: string, coverLetter?: string): Promise<QueuedResponse> => {
+  const { data } = await axiosClient.post<QueuedResponse>(`/jobseeker/apply/${jobId}`, {
+    coverLetter,
+  });
   return data;
 };
 
 // ─── Saved Jobs (reads) ───────────────────────────────────────────────────────
 
 export const getSavedJobs = async (signal?: AbortSignal): Promise<SavedJob[]> => {
-  const { data: { savedJobs } } = await axiosClient.get<{ savedJobs: SavedJob[] }>('/jobseeker/saved', { signal });
+  const {
+    data: { savedJobs },
+  } = await axiosClient.get<{ savedJobs: SavedJob[] }>('/jobseeker/saved', { signal });
   return savedJobs;
 };
 
@@ -55,7 +53,9 @@ export const unsaveJob = async (jobId: string): Promise<void> => {
 // ─── My Applications (synchronous reads) ─────────────────────────────────────
 
 export const getMyApplications = async (signal?: AbortSignal): Promise<Application[]> => {
-  const { data: { applications } } = await axiosClient.get<{ applications: Application[] }>('/jobseeker/applications', { signal });
+  const {
+    data: { applications },
+  } = await axiosClient.get<{ applications: Application[] }>('/jobseeker/applications', { signal });
   return applications;
 };
 

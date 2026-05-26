@@ -9,7 +9,13 @@ export default function JobDetailBody({ job }: JobDetailBodyProps) {
   return (
     <div
       className="glass"
-      style={{ borderRadius: 'var(--radius-xl)', padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}
+      style={{
+        borderRadius: 'var(--radius-xl)',
+        padding: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+      }}
     >
       <JobDetailSection title="📋 About This Role" content={job.description} />
       <hr className="divider" />
@@ -19,7 +25,14 @@ export default function JobDetailBody({ job }: JobDetailBodyProps) {
         <>
           <hr className="divider" />
           <div>
-            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-muted)' }}>
+            <h3
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: '1rem',
+                fontWeight: 700,
+                color: 'var(--color-text-muted)',
+              }}
+            >
               🔗 Company Website
             </h3>
             <a
@@ -36,8 +49,11 @@ export default function JobDetailBody({ job }: JobDetailBodyProps) {
 
       <hr className="divider" />
       <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-        Posted on {new Date(job.createdAt).toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric',
+        Posted on{' '}
+        {new Date(job.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         })}
       </p>
     </div>

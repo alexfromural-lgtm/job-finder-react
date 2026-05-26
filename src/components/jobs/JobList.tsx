@@ -23,15 +23,19 @@ export default function JobList({
   const sentinelRef = useRef<HTMLDivElement>(null);
   // Keep callback in a ref so the observer doesn't need to re-register on every render
   const callbackRef = useRef(onLoadMore);
-  useEffect(() => { callbackRef.current = onLoadMore; }, [onLoadMore]);
+  useEffect(() => {
+    callbackRef.current = onLoadMore;
+  }, [onLoadMore]);
 
   // Attach IntersectionObserver only when onLoadMore is provided
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!onLoadMore || !sentinel) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) callbackRef.current?.(); },
-      { rootMargin: '300px' },
+      ([entry]) => {
+        if (entry.isIntersecting) callbackRef.current?.();
+      },
+      { rootMargin: '300px' }
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
@@ -59,7 +63,11 @@ export default function JobList({
     <>
       <div className="grid-jobs">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} actions={renderActions ? renderActions(job) : undefined} />
+          <JobCard
+            key={job.id}
+            job={job}
+            actions={renderActions ? renderActions(job) : undefined}
+          />
         ))}
       </div>
 

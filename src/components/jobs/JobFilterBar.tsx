@@ -23,9 +23,13 @@ export default function JobFilterBar({
     <div
       className="glass"
       style={{
-        display: 'flex', gap: '1rem', padding: '1rem 1.5rem',
-        borderRadius: 'var(--radius-lg)', marginBottom: '2rem',
-        flexWrap: 'wrap', alignItems: 'center',
+        display: 'flex',
+        gap: '1rem',
+        padding: '1rem 1.5rem',
+        borderRadius: 'var(--radius-lg)',
+        marginBottom: '2rem',
+        flexWrap: 'wrap',
+        alignItems: 'center',
       }}
     >
       <div style={{ flex: 1, minWidth: 200 }}>
@@ -47,7 +51,11 @@ export default function JobFilterBar({
         style={{ width: 'auto', minWidth: 160 }}
       >
         <option value="">All Categories</option>
-        {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+        {categories.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
       </select>
 
       {hasActiveFilters && (

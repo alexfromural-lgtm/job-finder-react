@@ -15,7 +15,16 @@ interface FieldRowProps {
   multiline?: boolean;
 }
 
-function FieldRow({ label, value, editing, required, placeholder, name, onChange, multiline }: FieldRowProps) {
+function FieldRow({
+  label,
+  value,
+  editing,
+  required,
+  placeholder,
+  name,
+  onChange,
+  multiline,
+}: FieldRowProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
       <label className="input-label" htmlFor={`profile-field-${name}`}>
@@ -164,7 +173,12 @@ export default function RecruiterProfilePage() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <h1
-              style={{ margin: '0 0 0.25rem', fontSize: '1.6rem', fontWeight: 800, wordBreak: 'break-word' }}
+              style={{
+                margin: '0 0 0.25rem',
+                fontSize: '1.6rem',
+                fontWeight: 800,
+                wordBreak: 'break-word',
+              }}
             >
               {profile?.user?.name ?? 'Recruiter'}
             </h1>
@@ -244,7 +258,14 @@ export default function RecruiterProfilePage() {
           />
 
           {editing && (
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', paddingTop: '0.5rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '0.75rem',
+                justifyContent: 'flex-end',
+                paddingTop: '0.5rem',
+              }}
+            >
               <Button id="profile-cancel-btn" variant="ghost" onClick={handleCancel}>
                 Cancel
               </Button>

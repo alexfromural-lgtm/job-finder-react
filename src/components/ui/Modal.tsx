@@ -9,7 +9,13 @@ interface ModalProps {
   maxWidth?: string;
 }
 
-export default function Modal({ isOpen, onClose, title, children, maxWidth = '560px' }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  maxWidth = '560px',
+}: ModalProps) {
   // Close on Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -26,20 +32,26 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = '56
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div
-        className="modal-box"
-        style={{ maxWidth }}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div className="modal-box" style={{ maxWidth }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 id="modal-title" className="modal-title">{title}</h2>
+          <h2 id="modal-title" className="modal-title">
+            {title}
+          </h2>
           <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close modal">
             ✕
           </Button>

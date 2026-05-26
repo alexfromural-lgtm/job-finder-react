@@ -43,7 +43,13 @@ export default function LoginPage() {
   return (
     <div
       className="hero-gradient"
-      style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
     >
       <div
         className="glass-strong"
@@ -66,15 +72,17 @@ export default function LoginPage() {
           >
             ⚡
           </div>
-          <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 800 }}>
-            Welcome back
-          </h1>
+          <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 800 }}>Welcome back</h1>
           <p style={{ margin: '0.5rem 0 0', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
             Sign in to your JobFinder account
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}
+        >
           {error && <div className="alert alert-error">{error}</div>}
 
           <Input
@@ -112,7 +120,14 @@ export default function LoginPage() {
 
         <hr className="divider" />
 
-        <p style={{ textAlign: 'center', fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: 0 }}>
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            color: 'var(--color-text-muted)',
+            margin: 0,
+          }}
+        >
           Don't have an account?{' '}
           <Link to="/signup" style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
             Sign up free

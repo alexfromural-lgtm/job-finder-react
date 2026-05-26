@@ -23,9 +23,20 @@ export default function JobCard({ job, actions }: JobCardProps) {
   const navigate = useNavigate();
 
   return (
-    <Card hover className="job-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <Card
+      hover
+      className="job-card"
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+    >
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: '0.5rem',
+        }}
+      >
         <h3
           style={{
             margin: 0,
@@ -46,7 +57,14 @@ export default function JobCard({ job, actions }: JobCardProps) {
 
       {/* Company (from recruiter profile if available) */}
       {job.recruiter?.companyName && (
-        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: '0.85rem',
+            color: 'var(--color-text-muted)',
+            fontWeight: 500,
+          }}
+        >
           🏢 {job.recruiter.companyName}
         </p>
       )}
@@ -76,7 +94,14 @@ export default function JobCard({ job, actions }: JobCardProps) {
       </p>
 
       {/* Footer */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: 'auto',
+        }}
+      >
         <Button
           id={`view-job-${job.id}`}
           variant="secondary"

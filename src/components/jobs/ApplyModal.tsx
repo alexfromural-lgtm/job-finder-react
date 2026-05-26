@@ -23,7 +23,9 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
 
   // Abort any in-flight poll on unmount
   useEffect(() => {
-    return () => { pollAbortRef.current?.abort(); };
+    return () => {
+      pollAbortRef.current?.abort();
+    };
   }, []);
 
   // Focus textarea on open
@@ -66,8 +68,8 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
       const message =
         err instanceof Error
           ? err.message
-          : (err as { response?: { data?: { error?: string } } })?.response?.data?.error
-            ?? 'Something went wrong. Please try again.';
+          : ((err as { response?: { data?: { error?: string } } })?.response?.data?.error ??
+            'Something went wrong. Please try again.');
 
       setErrorMsg(message);
       setSuccessMsg(''); // clear the "processing" state if we showed it
@@ -112,7 +114,14 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            marginBottom: '1.5rem',
+          }}
+        >
           <div>
             <h2
               id="apply-modal-title"
@@ -121,7 +130,8 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
               Apply for Position
             </h2>
             <p style={{ margin: 0, color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-              {jobTitle}{companyName ? ` · ${companyName}` : ''}
+              {jobTitle}
+              {companyName ? ` · ${companyName}` : ''}
             </p>
           </div>
           <button
@@ -161,13 +171,21 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
               /* Processing phase — show spinner + neutral colour */
               <>
                 <div className="spinner" style={{ width: 32, height: 32 }} />
-                <span style={{ color: 'var(--color-text-muted)', fontSize: '1rem', fontWeight: 600 }}>
+                <span
+                  style={{ color: 'var(--color-text-muted)', fontSize: '1rem', fontWeight: 600 }}
+                >
                   {successMsg}
                 </span>
               </>
             ) : (
               /* Completed phase — green success */
-              <span style={{ color: 'var(--color-success, #22c55e)', fontSize: '1.1rem', fontWeight: 700 }}>
+              <span
+                style={{
+                  color: 'var(--color-success, #22c55e)',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                }}
+              >
                 {successMsg}
               </span>
             )}
@@ -176,7 +194,13 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
           <form onSubmit={handleSubmit}>
             <label
               htmlFor="cover-letter-input"
-              style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text-muted)' }}
+              style={{
+                display: 'block',
+                marginBottom: '0.5rem',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                color: 'var(--color-text-muted)',
+              }}
             >
               Cover Letter <span style={{ fontWeight: 400, opacity: 0.7 }}>(optional)</span>
             </label>
@@ -204,7 +228,14 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'flex-end' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '0.75rem',
+                marginTop: '1.5rem',
+                justifyContent: 'flex-end',
+              }}
+            >
               <Button
                 id="apply-modal-cancel"
                 type="button"
@@ -214,12 +245,7 @@ export default function ApplyModal({ jobId, jobTitle, companyName, onSuccess, on
               >
                 Cancel
               </Button>
-              <Button
-                id="apply-modal-submit"
-                type="submit"
-                variant="primary"
-                loading={loading}
-              >
+              <Button id="apply-modal-submit" type="submit" variant="primary" loading={loading}>
                 Submit Application
               </Button>
             </div>

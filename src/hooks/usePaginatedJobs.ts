@@ -95,7 +95,7 @@ export function usePaginatedJobs({
   // ── Apply filter (memoised; filterFn is the only Job-aware piece) ──────────
   const filteredJobs = useMemo(
     () => allJobs.filter((j) => filterFn(j, debouncedSearch, categoryFilter)),
-    [allJobs, debouncedSearch, categoryFilter, filterFn],
+    [allJobs, debouncedSearch, categoryFilter, filterFn]
   );
 
   // ── Generic pagination ─────────────────────────────────────────────────────
@@ -146,15 +146,15 @@ export function usePaginatedJobs({
       pagination.goToPage(n);
       setScrollModeRaw(false);
     },
-    [pagination],
+    [pagination]
   );
 
   const setPageSize = useCallback(
     (n: number) => {
       pagination.setPageSize(n); // also resets to page 1
-      scroll.reset(n);           // reset scroll window to new page size
+      scroll.reset(n); // reset scroll window to new page size
     },
-    [pagination, scroll],
+    [pagination, scroll]
   );
 
   const setScrollMode = useCallback(
@@ -162,7 +162,7 @@ export function usePaginatedJobs({
       setScrollModeRaw(v);
       if (!v) pagination.reset();
     },
-    [pagination],
+    [pagination]
   );
 
   return {

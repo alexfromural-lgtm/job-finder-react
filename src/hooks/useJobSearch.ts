@@ -40,7 +40,9 @@ export function useJobSearch(): UseJobSearchResult {
   const [search, setSearchRaw] = useState(() => searchParams.get('search') ?? '');
   const debouncedSearch = useDebounce(search, 300);
   const [categoryFilter, setCategoryFilterRaw] = useState(() => searchParams.get('category') ?? '');
-  const [page, setPage] = useState(() => Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1));
+  const [page, setPage] = useState(() =>
+    Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1)
+  );
   const [pageSize, setPageSizeRaw] = useState(() => {
     const ps = parseInt(searchParams.get('pageSize') ?? String(DEFAULT_PAGE_SIZE), 10);
     return (PAGE_SIZES as readonly number[]).includes(ps) ? ps : DEFAULT_PAGE_SIZE;
@@ -51,7 +53,12 @@ export function useJobSearch(): UseJobSearchResult {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [scrollJobs, setScrollJobs] = useState<Job[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [meta, setMeta] = useState<JobsMeta>({ total: 0, page: 1, pageSize: DEFAULT_PAGE_SIZE, totalPages: 1 });
+  const [meta, setMeta] = useState<JobsMeta>({
+    total: 0,
+    page: 1,
+    pageSize: DEFAULT_PAGE_SIZE,
+    totalPages: 1,
+  });
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
@@ -59,7 +66,10 @@ export function useJobSearch(): UseJobSearchResult {
   // ── Reset to page 1 whenever filters / page-size change ───────────────────
   const isFirstRender = useRef(true);
   useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setPage(1);
     setScrollJobs([]);
   }, [debouncedSearch, categoryFilter, pageSize]);
@@ -70,8 +80,13 @@ export function useJobSearch(): UseJobSearchResult {
     setLoading(true);
 
     JobsApi.searchJobs(
-      { search: debouncedSearch || undefined, category: categoryFilter || undefined, page, pageSize },
-      controller.signal,
+      {
+        search: debouncedSearch || undefined,
+        category: categoryFilter || undefined,
+        page,
+        pageSize,
+      },
+      controller.signal
     )
       .then(({ jobs: newJobs, meta: newMeta }) => {
         setJobs(newJobs);
@@ -79,14 +94,23 @@ export function useJobSearch(): UseJobSearchResult {
         if (scrollMode) setScrollJobs((prev) => (page === 1 ? newJobs : [...prev, ...newJobs]));
         // Seed categories from the initial unfiltered load
         if (!debouncedSearch && !categoryFilter && page === 1) {
-          setCategories(Array.from(new Set(newJobs.map((j) => j.category).filter(Boolean))) as string[]);
+          setCategories(
+            Array.from(new Set(newJobs.map((j) => j.category).filter(Boolean))) as string[]
+          );
         }
       })
       .catch((err) => {
-        if (err?.name === 'CanceledError' || err?.name === 'AbortError' || err?.code === 'ERR_CANCELED') return;
+        if (
+          err?.name === 'CanceledError' ||
+          err?.name === 'AbortError' ||
+          err?.code === 'ERR_CANCELED'
+        )
+          return;
         setError('Could not load jobs. Make sure the backend is running.');
       })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
 
     return () => controller.abort();
   }, [debouncedSearch, categoryFilter, page, pageSize]); // scrollMode intentionally excluded
@@ -111,17 +135,26 @@ export function useJobSearch(): UseJobSearchResult {
   const setScrollMode = useCallback(
     (v: boolean) => {
       setScrollModeRaw(v);
-      if (v) setScrollJobs([...jobs]); // seed scroll list from current page
-      else { setScrollJobs([]); setPage(1); }
+      if (v)
+        setScrollJobs([...jobs]); // seed scroll list from current page
+      else {
+        setScrollJobs([]);
+        setPage(1);
+      }
     },
-    [jobs],
+    [jobs]
   );
 
   const loadMore = useCallback(() => {
     if (loadingMore || meta.page >= meta.totalPages) return;
     const nextPage = meta.page + 1;
     setLoadingMore(true);
-    JobsApi.searchJobs({ search: debouncedSearch || undefined, category: categoryFilter || undefined, page: nextPage, pageSize })
+    JobsApi.searchJobs({
+      search: debouncedSearch || undefined,
+      category: categoryFilter || undefined,
+      page: nextPage,
+      pageSize,
+    })
       .then(({ jobs: newJobs, meta: newMeta }) => {
         setScrollJobs((prev) => [...prev, ...newJobs]);
         setMeta(newMeta);
@@ -139,9 +172,23 @@ export function useJobSearch(): UseJobSearchResult {
   const hasMore = meta.page < meta.totalPages;
 
   return {
-    search, categoryFilter, page, pageSize, scrollMode,
-    categories, meta, displayJobs, hasMore,
-    loading, loadingMore, error,
-    setSearch, setCategoryFilter, setPage, setPageSize, setScrollMode, loadMore,
+    search,
+    categoryFilter,
+    page,
+    pageSize,
+    scrollMode,
+    categories,
+    meta,
+    displayJobs,
+    hasMore,
+    loading,
+    loadingMore,
+    error,
+    setSearch,
+    setCategoryFilter,
+    setPage,
+    setPageSize,
+    setScrollMode,
+    loadMore,
   };
 }

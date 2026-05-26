@@ -49,7 +49,7 @@ export function usePagination({
 
   const goToPage = useCallback(
     (n: number) => setCurrentPage(Math.max(1, Math.min(n, totalPages))),
-    [totalPages],
+    [totalPages]
   );
 
   const setPageSize = useCallback((n: number) => {
@@ -64,8 +64,16 @@ export function usePagination({
       const start = (safePage - 1) * pageSize;
       return items.slice(start, start + pageSize);
     },
-    [safePage, pageSize],
+    [safePage, pageSize]
   );
 
-  return { currentPage: safePage, pageSize, totalPages, goToPage, setPageSize, reset, getPageSlice };
+  return {
+    currentPage: safePage,
+    pageSize,
+    totalPages,
+    goToPage,
+    setPageSize,
+    reset,
+    getPageSlice,
+  };
 }

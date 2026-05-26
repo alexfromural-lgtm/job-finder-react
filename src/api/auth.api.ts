@@ -1,10 +1,5 @@
 import axiosClient from './axiosClient';
-import type {
-  LoginRequest,
-  JobSeekerSignupRequest,
-  RecruiterSignupRequest,
-  User,
-} from '../types';
+import type { LoginRequest, JobSeekerSignupRequest, RecruiterSignupRequest, User } from '../types';
 
 export const signupJobSeeker = async (data: JobSeekerSignupRequest): Promise<void> => {
   await axiosClient.post('/auth/signup/jobseeker', data);
@@ -23,7 +18,9 @@ export const logout = async (): Promise<void> => {
 };
 
 export const getMe = async (signal?: AbortSignal): Promise<User> => {
-  const { data: { user } } = await axiosClient.get<{ user: User }>('/auth/me', { signal });
+  const {
+    data: { user },
+  } = await axiosClient.get<{ user: User }>('/auth/me', { signal });
   return user;
 };
 

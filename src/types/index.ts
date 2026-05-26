@@ -98,13 +98,7 @@ export interface SavedJob {
 
 // ─── Queue ────────────────────────────────────────────────────────────────────
 
-export type QueueJobStatus =
-  | 'waiting'
-  | 'active'
-  | 'completed'
-  | 'failed'
-  | 'delayed'
-  | 'paused';
+export type QueueJobStatus = 'waiting' | 'active' | 'completed' | 'failed' | 'delayed' | 'paused';
 
 export interface QueueJobResponse {
   id: string | number;

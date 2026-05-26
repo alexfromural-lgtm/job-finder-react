@@ -48,16 +48,15 @@ export default function JobDetailPage() {
     const controller = new AbortController();
 
     setCheckingApplication(true);
-    Promise.all([
-      getMyApplications(controller.signal),
-      getSavedJobs(controller.signal),
-    ])
+    Promise.all([getMyApplications(controller.signal), getSavedJobs(controller.signal)])
       .then(([apps, saved]) => {
         const existing = apps.find((a) => a.jobId === id);
         if (existing) setApplicationId(existing.id);
         setIsSaved(saved.some((s) => s.jobId === id));
       })
-      .catch(() => { /* non-critical — silently ignore */ })
+      .catch(() => {
+        /* non-critical — silently ignore */
+      })
       .finally(() => setCheckingApplication(false));
 
     return () => controller.abort();
@@ -65,7 +64,9 @@ export default function JobDetailPage() {
 
   // Cleanup any in-flight save poll on unmount
   useEffect(() => {
-    return () => { saveAbortRef.current?.abort(); };
+    return () => {
+      saveAbortRef.current?.abort();
+    };
   }, []);
 
   const handleApplySuccess = useCallback((newApplicationId: string) => {
@@ -183,4 +184,3 @@ export default function JobDetailPage() {
     </>
   );
 }
-

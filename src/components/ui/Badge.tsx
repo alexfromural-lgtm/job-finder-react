@@ -7,11 +7,7 @@ interface BadgeProps {
 }
 
 export default function Badge({ children, color = 'blue', className = '' }: BadgeProps) {
-  return (
-    <span className={`badge badge-${color} ${className}`}>
-      {children}
-    </span>
-  );
+  return <span className={`badge badge-${color} ${className}`}>{children}</span>;
 }
 
 // Status-to-color map for ApplicationStatus

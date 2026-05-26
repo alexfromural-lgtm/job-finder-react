@@ -8,7 +8,13 @@ interface CardProps {
   style?: CSSProperties;
 }
 
-export default function Card({ children, className = '', hover = false, onClick, style }: CardProps) {
+export default function Card({
+  children,
+  className = '',
+  hover = false,
+  onClick,
+  style,
+}: CardProps) {
   return (
     <div
       className={`card ${hover ? 'card-hover' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}

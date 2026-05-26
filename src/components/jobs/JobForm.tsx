@@ -12,11 +12,26 @@ interface JobFormProps {
 }
 
 const CATEGORIES = [
-  'Engineering', 'Design', 'Marketing', 'Sales', 'Finance',
-  'Operations', 'HR', 'Legal', 'Product', 'Data', 'Customer Support', 'Other',
+  'Engineering',
+  'Design',
+  'Marketing',
+  'Sales',
+  'Finance',
+  'Operations',
+  'HR',
+  'Legal',
+  'Product',
+  'Data',
+  'Customer Support',
+  'Other',
 ];
 
-export default function JobForm({ initial, onSubmit, onCancel, submitLabel = 'Post Job' }: JobFormProps) {
+export default function JobForm({
+  initial,
+  onSubmit,
+  onCancel,
+  submitLabel = 'Post Job',
+}: JobFormProps) {
   const [form, setForm] = useState<JobFormData>({
     title: initial?.title ?? '',
     description: initial?.description ?? '',
@@ -42,12 +57,12 @@ export default function JobForm({ initial, onSubmit, onCancel, submitLabel = 'Po
     }
   }, [initial]);
 
-  const set = (field: keyof JobFormData) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
+  const set =
+    (field: keyof JobFormData) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    };
 
   const validate = (): boolean => {
     const errs: typeof errors = {};
@@ -78,7 +93,11 @@ export default function JobForm({ initial, onSubmit, onCancel, submitLabel = 'Po
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+    >
       {serverError && <div className="alert alert-error">{serverError}</div>}
 
       <Input
@@ -109,7 +128,9 @@ export default function JobForm({ initial, onSubmit, onCancel, submitLabel = 'Po
       </div>
 
       <div className="input-wrapper">
-        <label htmlFor="job-category" className="input-label">Category</label>
+        <label htmlFor="job-category" className="input-label">
+          Category
+        </label>
         <select
           id="job-category"
           className="input"
@@ -118,7 +139,9 @@ export default function JobForm({ initial, onSubmit, onCancel, submitLabel = 'Po
         >
           <option value="">Select a category</option>
           {CATEGORIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
         </select>
       </div>

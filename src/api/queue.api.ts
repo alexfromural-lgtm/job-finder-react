@@ -20,7 +20,7 @@ export interface QueueJobResult {
 
 export const getQueueJobStatus = async (
   jobId: string | number,
-  signal?: AbortSignal,
+  signal?: AbortSignal
 ): Promise<QueueJobResult> => {
   const { data } = await axiosClient.get<QueueJobResult>(`/queue/job/${jobId}`, { signal });
   return data;
@@ -40,7 +40,7 @@ export const pollUntilDone = (
   jobId: string | number,
   intervalMs = 600,
   timeoutMs = 30_000,
-  signal?: AbortSignal,
+  signal?: AbortSignal
 ): Promise<QueueJobResult> => {
   return new Promise((resolve, reject) => {
     const deadline = Date.now() + timeoutMs;
@@ -62,7 +62,9 @@ export const pollUntilDone = (
       if (signal?.aborted) return; // guard — abort fired between ticks
 
       if (Date.now() >= deadline) {
-        reject(new Error('Timed out waiting for the server to process your request. Please try again.'));
+        reject(
+          new Error('Timed out waiting for the server to process your request. Please try again.')
+        );
         return;
       }
 

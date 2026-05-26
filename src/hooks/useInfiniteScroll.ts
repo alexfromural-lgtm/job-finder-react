@@ -48,14 +48,11 @@ export function useInfiniteScroll({
     });
   }, [loadingMore, hasMore, pageSize, totalItems]);
 
-  const reset = useCallback(
-    (count?: number) => setVisibleCount(count ?? pageSize),
-    [pageSize],
-  );
+  const reset = useCallback((count?: number) => setVisibleCount(count ?? pageSize), [pageSize]);
 
   const getVisibleSlice = useCallback(
     <T>(items: T[]): T[] => items.slice(0, visibleCount),
-    [visibleCount],
+    [visibleCount]
   );
 
   return { visibleCount, hasMore, loadingMore, loadMore, reset, getVisibleSlice };

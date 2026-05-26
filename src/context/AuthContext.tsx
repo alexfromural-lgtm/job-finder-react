@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import type { User, Role, JobSeekerSignupRequest, RecruiterSignupRequest } from '../types';
 import * as AuthApi from '../api/auth.api';
 
@@ -26,10 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const hasRole = useCallback(
-    (role: Role) => user?.roles.includes(role) ?? false,
-    [user]
-  );
+  const hasRole = useCallback((role: Role) => user?.roles.includes(role) ?? false, [user]);
 
   const login = useCallback(async (email: string, password: string) => {
     // Backend sets accessToken + refreshToken cookies; just fetch the user profile

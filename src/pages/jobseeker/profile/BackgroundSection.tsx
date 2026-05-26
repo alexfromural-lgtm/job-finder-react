@@ -53,7 +53,14 @@ export default function BackgroundSection({
       />
 
       {editing && (
-        <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', paddingTop: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.75rem',
+            justifyContent: 'flex-end',
+            paddingTop: '0.5rem',
+          }}
+        >
           <Button id="profile-cancel-btn" variant="ghost" onClick={onCancel}>
             Cancel
           </Button>

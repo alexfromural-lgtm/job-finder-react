@@ -30,7 +30,7 @@ export default function ApplicationsPage() {
     setApplications((prev) => prev.filter((a) => a.id !== id));
   };
 
-  const submitted   = applications.filter((a) => a.status === 'submitted').length;
+  const submitted = applications.filter((a) => a.status === 'submitted').length;
   const shortlisted = applications.filter((a) => a.status === 'shortlisted').length;
   const underReview = applications.filter((a) => a.status === 'under_review').length;
 
@@ -47,7 +47,15 @@ export default function ApplicationsPage() {
             animation: 'slideUp 0.3s ease',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
             <div>
               <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.6rem', fontWeight: 800 }}>
                 My Applications
@@ -76,18 +84,17 @@ export default function ApplicationsPage() {
             >
               ← Back to Dashboard
             </Button>
-            <Button
-              id="browse-jobs-btn"
-              variant="primary"
-              size="sm"
-              onClick={() => navigate('/')}
-            >
+            <Button id="browse-jobs-btn" variant="primary" size="sm" onClick={() => navigate('/')}>
               Browse Jobs →
             </Button>
           </div>
         </div>
 
-        {error && <div className="alert alert-error" style={{ marginBottom: '1rem' }}>{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+            {error}
+          </div>
+        )}
 
         <ApplicationsList
           applications={applications}
@@ -103,10 +110,17 @@ function Stat({ label, value, color }: { label: string; value: number; color: st
   return (
     <div
       className="glass"
-      style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', textAlign: 'center', minWidth: 72 }}
+      style={{
+        padding: '0.75rem 1.25rem',
+        borderRadius: 'var(--radius-md)',
+        textAlign: 'center',
+        minWidth: 72,
+      }}
     >
       <div style={{ fontSize: '1.4rem', fontWeight: 800, color }}>{value}</div>
-      <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '0.1rem' }}>{label}</div>
+      <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', marginTop: '0.1rem' }}>
+        {label}
+      </div>
     </div>
   );
 }

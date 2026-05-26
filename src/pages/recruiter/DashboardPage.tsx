@@ -9,7 +9,6 @@ import Modal from '../../components/ui/Modal';
 import { extractApiError } from '../../utils/apiError';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
-
 export default function RecruiterDashboard() {
   const { user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -103,7 +102,8 @@ export default function RecruiterDashboard() {
               My Job Postings
             </h1>
             <p style={{ margin: 0, color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-              Welcome back, {user?.name?.split(' ')[0]}. Manage your listings, find the right candidate.
+              Welcome back, {user?.name?.split(' ')[0]}. Manage your listings, find the right
+              candidate.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -115,10 +115,16 @@ export default function RecruiterDashboard() {
               <div
                 key={s.label}
                 className="glass"
-                style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius-md)', textAlign: 'center' }}
+                style={{
+                  padding: '0.75rem 1.25rem',
+                  borderRadius: 'var(--radius-md)',
+                  textAlign: 'center',
+                }}
               >
                 <div style={{ fontSize: '1.5rem', fontWeight: 800, color: s.color }}>{s.value}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{s.label}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  {s.label}
+                </div>
               </div>
             ))}
             <Button
@@ -133,12 +139,22 @@ export default function RecruiterDashboard() {
         </div>
 
         {/* Alerts */}
-        {successMsg && <div className="alert alert-success" style={{ marginBottom: '1.25rem' }}>{successMsg}</div>}
-        {error && <div className="alert alert-error" style={{ marginBottom: '1.25rem' }}>{error}</div>}
+        {successMsg && (
+          <div className="alert alert-success" style={{ marginBottom: '1.25rem' }}>
+            {successMsg}
+          </div>
+        )}
+        {error && (
+          <div className="alert alert-error" style={{ marginBottom: '1.25rem' }}>
+            {error}
+          </div>
+        )}
 
         {/* Job list */}
         {loading ? (
-          <div className="spinner-page"><div className="spinner" style={{ width: 36, height: 36 }} /></div>
+          <div className="spinner-page">
+            <div className="spinner" style={{ width: 36, height: 36 }} />
+          </div>
         ) : jobs.length === 0 ? (
           <div
             className="glass"
@@ -149,7 +165,9 @@ export default function RecruiterDashboard() {
             }}
           >
             <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>📭</div>
-            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', fontWeight: 700 }}>No job postings yet</h3>
+            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', fontWeight: 700 }}>
+              No job postings yet
+            </h3>
             <p style={{ margin: '0 0 1.5rem', color: 'var(--color-text-muted)' }}>
               Create your first job posting to start finding candidates.
             </p>
@@ -191,7 +209,11 @@ export default function RecruiterDashboard() {
 
       {/* Create Job Modal */}
       <Modal isOpen={createOpen} onClose={() => setCreateOpen(false)} title="✨ Post New Job">
-        <JobForm onSubmit={handleCreate} onCancel={() => setCreateOpen(false)} submitLabel="Post Job" />
+        <JobForm
+          onSubmit={handleCreate}
+          onCancel={() => setCreateOpen(false)}
+          submitLabel="Post Job"
+        />
       </Modal>
 
       {/* Edit Job Modal */}
@@ -207,10 +229,16 @@ export default function RecruiterDashboard() {
       </Modal>
 
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Delete Job Posting" maxWidth="400px">
+      <Modal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        title="Delete Job Posting"
+        maxWidth="400px"
+      >
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
-          Are you sure you want to delete <strong style={{ color: 'var(--color-text)' }}>"{deleteTarget?.title}"</strong>?
-          This action cannot be undone.
+          Are you sure you want to delete{' '}
+          <strong style={{ color: 'var(--color-text)' }}>"{deleteTarget?.title}"</strong>? This
+          action cannot be undone.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
           <Button variant="ghost" onClick={() => setDeleteTarget(null)}>

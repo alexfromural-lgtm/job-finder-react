@@ -41,7 +41,14 @@ export default function ProfileHeader({ profile, location, editing, onEdit }: Pr
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.6rem', fontWeight: 800, wordBreak: 'break-word' }}>
+        <h1
+          style={{
+            margin: '0 0 0.25rem',
+            fontSize: '1.6rem',
+            fontWeight: 800,
+            wordBreak: 'break-word',
+          }}
+        >
           {profile?.user?.name ?? 'Job Seeker'}
         </h1>
         <p style={{ margin: '0 0 0.5rem', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
