@@ -22,6 +22,9 @@ dist-ssr
 .cursor/
 .codex/
 
+# Husky internal storage (auto-generated, not tracked)
+.husky/_
+
 .idea
 .DS_Store
 *.suo
