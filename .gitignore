@@ -16,6 +16,12 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# AI editors
+.claude/
+.cursor/
+.codex/
+
 .idea
 .DS_Store
 *.suo
