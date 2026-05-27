@@ -1,12 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { Job } from '../types';
-import * as JobsApi from '../api/jobs.api';
 import type { JobsMeta } from '../api/jobs.api';
 import { PAGE_SIZES } from './usePagination';
 import { useDebounce } from './useDebounce';
-
-const DEFAULT_PAGE_SIZE = 10;
+import { useJobSearchStore, DEFAULT_PAGE_SIZE } from '../store/useJobSearchStore';
 
 export interface UseJobSearchResult {
   // Filter state
@@ -36,86 +34,62 @@ export interface UseJobSearchResult {
 export function useJobSearch(): UseJobSearchResult {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // ── Filter / pagination state (restored from URL on mount) ─────────────────
-  const [search, setSearchRaw] = useState(() => searchParams.get('search') ?? '');
+  // ── Select slices from store ─────────────────────────────────────────────────
+  const search = useJobSearchStore((s) => s.search);
+  const categoryFilter = useJobSearchStore((s) => s.categoryFilter);
+  const page = useJobSearchStore((s) => s.page);
+  const pageSize = useJobSearchStore((s) => s.pageSize);
+  const scrollMode = useJobSearchStore((s) => s.scrollMode);
+  const jobs = useJobSearchStore((s) => s.jobs);
+  const scrollJobs = useJobSearchStore((s) => s.scrollJobs);
+  const categories = useJobSearchStore((s) => s.categories);
+  const meta = useJobSearchStore((s) => s.meta);
+  const loading = useJobSearchStore((s) => s.loading);
+  const loadingMore = useJobSearchStore((s) => s.loadingMore);
+  const error = useJobSearchStore((s) => s.error);
+  const fetchJobs = useJobSearchStore((s) => s.fetchJobs);
+  const setSearch = useJobSearchStore((s) => s.setSearch);
+  const setCategoryFilter = useJobSearchStore((s) => s.setCategoryFilter);
+  const setPage = useJobSearchStore((s) => s.setPage);
+  const setPageSize = useJobSearchStore((s) => s.setPageSize);
+  const setScrollMode = useJobSearchStore((s) => s.setScrollMode);
+  const loadMore = useJobSearchStore((s) => s.loadMore);
+
+  // ── Debounce lives here — it's a React concern, not store state ──────────────
   const debouncedSearch = useDebounce(search, 300);
-  const [categoryFilter, setCategoryFilterRaw] = useState(() => searchParams.get('category') ?? '');
-  const [page, setPage] = useState(() =>
-    Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1)
-  );
-  const [pageSize, setPageSizeRaw] = useState(() => {
-    const ps = parseInt(searchParams.get('pageSize') ?? String(DEFAULT_PAGE_SIZE), 10);
-    return (PAGE_SIZES as readonly number[]).includes(ps) ? ps : DEFAULT_PAGE_SIZE;
-  });
-  const [scrollMode, setScrollModeRaw] = useState(false);
 
-  // ── API data ───────────────────────────────────────────────────────────────
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [scrollJobs, setScrollJobs] = useState<Job[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [meta, setMeta] = useState<JobsMeta>({
-    total: 0,
-    page: 1,
-    pageSize: DEFAULT_PAGE_SIZE,
-    totalPages: 1,
-  });
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState('');
-
-  // ── Reset to page 1 whenever filters / page-size change ───────────────────
-  const isFirstRender = useRef(true);
+  // ── One-time URL → store init on mount ───────────────────────────────────────
+  // Guard ensures this runs only on the first (real) mount even in StrictMode.
+  const initialized = useRef(false);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    setPage(1);
-    setScrollJobs([]);
-  }, [debouncedSearch, categoryFilter, pageSize]);
+    if (initialized.current) return;
+    initialized.current = true;
 
-  // ── Main data fetch (server-side) ──────────────────────────────────────────
+    const urlSearch = searchParams.get('search') ?? '';
+    const urlCategory = searchParams.get('category') ?? '';
+    const urlPage = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
+    const ps = parseInt(searchParams.get('pageSize') ?? String(DEFAULT_PAGE_SIZE), 10);
+    const urlPageSize = (PAGE_SIZES as readonly number[]).includes(ps) ? ps : DEFAULT_PAGE_SIZE;
+
+    if (urlSearch || urlCategory || urlPage > 1 || urlPageSize !== DEFAULT_PAGE_SIZE) {
+      useJobSearchStore.setState({
+        search: urlSearch,
+        categoryFilter: urlCategory,
+        page: urlPage,
+        pageSize: urlPageSize,
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Fetch whenever debounced filters or pagination change ────────────────────
   useEffect(() => {
     const controller = new AbortController();
-    setLoading(true);
-
-    JobsApi.searchJobs(
-      {
-        search: debouncedSearch || undefined,
-        category: categoryFilter || undefined,
-        page,
-        pageSize,
-      },
-      controller.signal
-    )
-      .then(({ jobs: newJobs, meta: newMeta }) => {
-        setJobs(newJobs);
-        setMeta(newMeta);
-        if (scrollMode) setScrollJobs((prev) => (page === 1 ? newJobs : [...prev, ...newJobs]));
-        // Seed categories from the initial unfiltered load
-        if (!debouncedSearch && !categoryFilter && page === 1) {
-          setCategories(
-            Array.from(new Set(newJobs.map((j) => j.category).filter(Boolean))) as string[]
-          );
-        }
-      })
-      .catch((err) => {
-        if (
-          err?.name === 'CanceledError' ||
-          err?.name === 'AbortError' ||
-          err?.code === 'ERR_CANCELED'
-        )
-          return;
-        setError('Could not load jobs. Make sure the backend is running.');
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
-      });
-
+    // Pass debouncedSearch as an override so the store uses the settled value
+    fetchJobs(controller.signal, { search: debouncedSearch });
     return () => controller.abort();
-  }, [debouncedSearch, categoryFilter, page, pageSize]); // scrollMode intentionally excluded
+  }, [debouncedSearch, categoryFilter, page, pageSize, fetchJobs]);
 
-  // ── URL persistence ────────────────────────────────────────────────────────
+  // ── Sync state → URL ─────────────────────────────────────────────────────────
   useEffect(() => {
     const params: Record<string, string> = {};
     if (debouncedSearch) params.search = debouncedSearch;
@@ -125,49 +99,7 @@ export function useJobSearch(): UseJobSearchResult {
     setSearchParams(params, { replace: true });
   }, [debouncedSearch, categoryFilter, page, pageSize, setSearchParams]);
 
-  // ── Actions ────────────────────────────────────────────────────────────────
-  const setSearch = useCallback((s: string) => setSearchRaw(s), []);
-
-  const setCategoryFilter = useCallback((c: string) => setCategoryFilterRaw(c), []);
-
-  const setPageSize = useCallback((n: number) => setPageSizeRaw(n), []);
-
-  const setScrollMode = useCallback(
-    (v: boolean) => {
-      setScrollModeRaw(v);
-      if (v)
-        setScrollJobs([...jobs]); // seed scroll list from current page
-      else {
-        setScrollJobs([]);
-        setPage(1);
-      }
-    },
-    [jobs]
-  );
-
-  const loadMore = useCallback(() => {
-    if (loadingMore || meta.page >= meta.totalPages) return;
-    const nextPage = meta.page + 1;
-    setLoadingMore(true);
-    JobsApi.searchJobs({
-      search: debouncedSearch || undefined,
-      category: categoryFilter || undefined,
-      page: nextPage,
-      pageSize,
-    })
-      .then(({ jobs: newJobs, meta: newMeta }) => {
-        setScrollJobs((prev) => [...prev, ...newJobs]);
-        setMeta(newMeta);
-        setPage(nextPage);
-      })
-      .catch((err) => {
-        if (err?.code === 'ERR_CANCELED') return;
-        setError('Could not load more jobs. Please try again.');
-      })
-      .finally(() => setLoadingMore(false));
-  }, [loadingMore, meta, debouncedSearch, categoryFilter, pageSize]);
-
-  // ── Derived values ─────────────────────────────────────────────────────────
+  // ── Derived ───────────────────────────────────────────────────────────────────
   const displayJobs = scrollMode ? scrollJobs : jobs;
   const hasMore = meta.page < meta.totalPages;
 

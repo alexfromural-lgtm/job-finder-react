@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 import { extractApiError } from '../utils/apiError';
 import { Input } from '../components/ui/Input';
 import Button from '../components/ui/Button';
@@ -8,7 +8,8 @@ import Button from '../components/ui/Button';
 type Tab = 'seeker' | 'recruiter';
 
 export default function SignupPage() {
-  const { signupJobSeeker, signupRecruiter } = useAuth();
+  const signupJobSeeker = useAuthStore((s) => s.signupJobSeeker);
+  const signupRecruiter = useAuthStore((s) => s.signupRecruiter);
   const [params] = useSearchParams();
   const [tab, setTab] = useState<Tab>((params.get('role') as Tab) ?? 'seeker');
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ export default function SignupPage() {
           industry: industry || undefined,
         });
       }
-      // AuthContext has already populated user state via getMe().
+      // Auth store has already populated user state via getMe().
       // Navigate directly to the dashboard.
       navigate(tab === 'seeker' ? '/dashboard/seeker' : '/dashboard/recruiter');
     } catch (err) {

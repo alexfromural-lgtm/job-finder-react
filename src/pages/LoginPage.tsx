@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 import { extractApiError } from '../utils/apiError';
 import { usePageTitle } from '../hooks/usePageTitle';
 import { Input } from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
 export default function LoginPage() {
-  const { login, hasRole } = useAuth();
+  const login = useAuthStore((s) => s.login);
+  const hasRole = useAuthStore((s) => s.hasRole);
   const navigate = useNavigate();
   usePageTitle('Sign In');
   const [email, setEmail] = useState('');

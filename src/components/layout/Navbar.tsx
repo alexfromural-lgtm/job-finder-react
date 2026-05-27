@@ -1,10 +1,14 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/useAuthStore';
 import Button from '../ui/Button';
 import { useState } from 'react';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isLoading, logout, hasRole } = useAuth();
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isLoading = useAuthStore((s) => s.isLoading);
+  const logout = useAuthStore((s) => s.logout);
+  const hasRole = useAuthStore((s) => s.hasRole);
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
 

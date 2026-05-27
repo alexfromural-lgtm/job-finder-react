@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/useAuthStore';
 import { getSavedJobs, unsaveJob } from '../../api/applications.api';
 import { extractApiError } from '../../utils/apiError';
 import type { SavedJob } from '../../types';
@@ -10,7 +10,7 @@ import Card from '../../components/ui/Card';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
 export default function SavedJobsPage() {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
   usePageTitle('Saved Jobs');
 

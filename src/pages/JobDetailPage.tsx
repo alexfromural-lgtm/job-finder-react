@@ -8,12 +8,14 @@ import Button from '../components/ui/Button';
 import ApplyModal from '../components/jobs/ApplyModal';
 import JobDetailHeader from '../components/jobs/JobDetailHeader';
 import JobDetailBody from '../components/jobs/JobDetailBody';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: isAuthLoading, hasRole } = useAuth();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAuthLoading = useAuthStore((s) => s.isLoading);
+  const hasRole = useAuthStore((s) => s.hasRole);
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

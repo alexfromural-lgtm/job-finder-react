@@ -1,4 +1,4 @@
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import JobList from '../../components/jobs/JobList';
 import Pagination from '../../components/ui/Pagination';
@@ -7,7 +7,7 @@ import { useJobSearch } from '../../hooks/useJobSearch';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
 export default function JobSeekerDashboard() {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
   usePageTitle('Dashboard');
 
