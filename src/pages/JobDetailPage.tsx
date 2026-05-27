@@ -8,12 +8,19 @@ import Button from '../components/ui/Button';
 import ApplyModal from '../components/jobs/ApplyModal';
 import JobDetailHeader from '../components/jobs/JobDetailHeader';
 import JobDetailBody from '../components/jobs/JobDetailBody';
-import { useAuth } from '../context/AuthContext';
+import { useAppSelector } from '../store/hooks';
+import {
+  selectIsAuthenticated,
+  selectIsLoading as selectIsAuthLoading,
+  selectHasRole,
+} from '../store/selectors/authSelectors';
 
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: isAuthLoading, hasRole } = useAuth();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthLoading = useAppSelector(selectIsAuthLoading);
+  const isJobSeeker = useAppSelector(selectHasRole('JOB_SEEKER'));
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -44,7 +51,7 @@ export default function JobDetailPage() {
 
   // Check if already applied & already saved (only for jobseekers)
   useEffect(() => {
-    if (!id || !isAuthenticated || !hasRole('JOB_SEEKER')) return;
+    if (!id || !isAuthenticated || !isJobSeeker) return;
     const controller = new AbortController();
 
     setCheckingApplication(true);
@@ -60,7 +67,7 @@ export default function JobDetailPage() {
       .finally(() => setCheckingApplication(false));
 
     return () => controller.abort();
-  }, [id, isAuthenticated, hasRole]);
+  }, [id, isAuthenticated, isJobSeeker]);
 
   // Cleanup any in-flight save poll on unmount
   useEffect(() => {
@@ -157,7 +164,7 @@ export default function JobDetailPage() {
           <JobDetailHeader
             job={job}
             isAuthenticated={isAuthenticated}
-            isJobSeeker={hasRole('JOB_SEEKER')}
+            isJobSeeker={isJobSeeker}
             checkingApplication={checkingApplication}
             applicationId={applicationId}
             isSaved={isSaved}

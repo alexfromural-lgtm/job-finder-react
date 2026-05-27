@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { extractApiError } from '../utils/apiError';
 import { usePageTitle } from '../hooks/usePageTitle';
 import { Input } from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import { useAppDispatch } from '../store/hooks';
+import { loginThunk } from '../store/slices/authSlice';
 
 export default function LoginPage() {
-  const { login, hasRole } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   usePageTitle('Sign In');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,11 +26,12 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      await login(email, password);
-      // Redirect to the role-specific dashboard
-      if (hasRole('RECRUITER')) {
+      // unwrap() returns the fulfilled User — read roles directly to avoid
+      // stale selector values from before the dispatch resolved
+      const user = await dispatch(loginThunk({ email, password })).unwrap();
+      if (user.roles.includes('RECRUITER')) {
         navigate('/dashboard/recruiter');
-      } else if (hasRole('JOB_SEEKER')) {
+      } else if (user.roles.includes('JOB_SEEKER')) {
         navigate('/dashboard/seeker');
       } else {
         navigate('/');

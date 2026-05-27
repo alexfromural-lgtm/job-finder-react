@@ -1,7 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import type { Role } from '../../types';
+import { useAppSelector } from '../../store/hooks';
+import {
+  selectIsAuthenticated,
+  selectIsLoading,
+  selectHasRole,
+} from '../../store/selectors/authSelectors';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -14,7 +19,9 @@ export default function ProtectedRoute({
   requiredRole,
   redirectTo = '/login',
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, hasRole } = useAuth();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isLoading = useAppSelector(selectIsLoading);
+  const hasRole = useAppSelector(requiredRole ? selectHasRole(requiredRole) : () => true);
 
   if (isLoading) {
     return (
@@ -28,7 +35,7 @@ export default function ProtectedRoute({
     return <Navigate to={redirectTo} replace />;
   }
 
-  if (requiredRole && !hasRole(requiredRole)) {
+  if (requiredRole && !hasRole) {
     return <Navigate to="/" replace />;
   }
 

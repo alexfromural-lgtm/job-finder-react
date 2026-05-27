@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useAppDispatch } from './store/hooks';
+import { initAuth, clearUser } from './store/slices/authSlice';
 import Navbar from './components/layout/Navbar';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
@@ -15,6 +18,25 @@ import ApplicationsPage from './pages/jobseeker/ApplicationsPage';
 import SavedJobsPage from './pages/jobseeker/SavedJobsPage';
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  // Restore session on mount. AbortController mirrors the original AuthContext
+  // behaviour: React 18 StrictMode double-mounts cause the first effect to be
+  // cleaned up immediately, aborting the in-flight request so the second (real)
+  // mount resolves correctly.
+  useEffect(() => {
+    const controller = new AbortController();
+    dispatch(initAuth(controller.signal));
+    return () => controller.abort();
+  }, [dispatch]);
+
+  // Listen for 401 events from the axios interceptor (refresh also failed)
+  useEffect(() => {
+    const handleUnauthorized = () => dispatch(clearUser());
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <Navbar />

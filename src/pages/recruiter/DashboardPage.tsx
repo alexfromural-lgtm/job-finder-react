@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAppSelector } from '../../store/hooks';
+import { selectUser } from '../../store/selectors/authSelectors';
 import * as JobsApi from '../../api/jobs.api';
 import type { Job, JobFormData } from '../../types';
 import JobCard from '../../components/jobs/JobCard';
@@ -10,7 +11,7 @@ import { extractApiError } from '../../utils/apiError';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
 export default function RecruiterDashboard() {
-  const { user } = useAuth();
+  const user = useAppSelector(selectUser);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

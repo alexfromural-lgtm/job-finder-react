@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { extractApiError } from '../utils/apiError';
 import { Input } from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import { useAppDispatch } from '../store/hooks';
+import { signupJobSeekerThunk, signupRecruiterThunk } from '../store/slices/authSlice';
 
 type Tab = 'seeker' | 'recruiter';
 
 export default function SignupPage() {
-  const { signupJobSeeker, signupRecruiter } = useAuth();
+  const dispatch = useAppDispatch();
   const [params] = useSearchParams();
   const [tab, setTab] = useState<Tab>((params.get('role') as Tab) ?? 'seeker');
   const navigate = useNavigate();
@@ -44,19 +45,20 @@ export default function SignupPage() {
     setError('');
     try {
       if (tab === 'seeker') {
-        await signupJobSeeker({ name, email, password });
+        await dispatch(signupJobSeekerThunk({ name, email, password })).unwrap();
       } else {
-        await signupRecruiter({
-          name,
-          email,
-          password,
-          companyName,
-          companyWebsite: companyWebsite || undefined,
-          industry: industry || undefined,
-        });
+        await dispatch(
+          signupRecruiterThunk({
+            name,
+            email,
+            password,
+            companyName,
+            companyWebsite: companyWebsite || undefined,
+            industry: industry || undefined,
+          })
+        ).unwrap();
       }
-      // AuthContext has already populated user state via getMe().
-      // Navigate directly to the dashboard.
+      // Redux has already populated user state via getMe() inside the thunk.
       navigate(tab === 'seeker' ? '/dashboard/seeker' : '/dashboard/recruiter');
     } catch (err) {
       setError(extractApiError(err, 'Registration failed. Please try again.'));

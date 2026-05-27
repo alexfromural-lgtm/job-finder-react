@@ -1,17 +1,32 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import Button from '../ui/Button';
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  selectUser,
+  selectIsAuthenticated,
+  selectIsLoading,
+  selectHasRole,
+} from '../../store/selectors/authSelectors';
+import { logoutThunk } from '../../store/slices/authSlice';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isLoading, logout, hasRole } = useAuth();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isLoading = useAppSelector(selectIsLoading);
+  const isJobSeeker = useAppSelector(selectHasRole('JOB_SEEKER'));
+  const isRecruiter = useAppSelector(selectHasRole('RECRUITER'));
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      await logout();
+      await dispatch(logoutThunk()).unwrap();
+      navigate('/');
+    } catch {
+      // logout always clears the client session even if the backend call fails
       navigate('/');
     } finally {
       setLoggingOut(false);
@@ -37,7 +52,7 @@ export default function Navbar() {
               Browse Jobs
             </NavLink>
 
-            {isAuthenticated && hasRole('JOB_SEEKER') && (
+            {isAuthenticated && isJobSeeker && (
               <NavLink
                 to="/dashboard/seeker"
                 end
@@ -47,7 +62,7 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {isAuthenticated && hasRole('JOB_SEEKER') && (
+            {isAuthenticated && isJobSeeker && (
               <NavLink
                 to="/dashboard/seeker/applications"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -56,7 +71,7 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {isAuthenticated && hasRole('JOB_SEEKER') && (
+            {isAuthenticated && isJobSeeker && (
               <NavLink
                 to="/dashboard/seeker/saved"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -65,7 +80,7 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {isAuthenticated && hasRole('JOB_SEEKER') && (
+            {isAuthenticated && isJobSeeker && (
               <NavLink
                 to="/profile/seeker"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -74,7 +89,7 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {isAuthenticated && hasRole('RECRUITER') && (
+            {isAuthenticated && isRecruiter && (
               <NavLink
                 to="/dashboard/recruiter"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
@@ -83,7 +98,7 @@ export default function Navbar() {
               </NavLink>
             )}
 
-            {isAuthenticated && hasRole('RECRUITER') && (
+            {isAuthenticated && isRecruiter && (
               <NavLink
                 to="/profile/recruiter"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}

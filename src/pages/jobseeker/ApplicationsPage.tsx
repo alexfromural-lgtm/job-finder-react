@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAppSelector } from '../../store/hooks';
+import { selectUser } from '../../store/selectors/authSelectors';
 import { getMyApplications } from '../../api/applications.api';
 import { extractApiError } from '../../utils/apiError';
 import type { Application } from '../../types';
@@ -8,7 +9,7 @@ import ApplicationsList from '../../components/jobs/ApplicationsList';
 import Button from '../../components/ui/Button';
 
 export default function ApplicationsPage() {
-  const { user } = useAuth();
+  const user = useAppSelector(selectUser);
   const navigate = useNavigate();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
