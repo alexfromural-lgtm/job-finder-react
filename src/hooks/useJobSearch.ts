@@ -5,6 +5,7 @@ import type { JobsMeta } from '../api/jobs.api';
 import { PAGE_SIZES } from './usePagination';
 import { useDebounce } from './useDebounce';
 import { useJobSearchStore, DEFAULT_PAGE_SIZE } from '../store/useJobSearchStore';
+import { useJobSearchSelectors } from '../store/useJobSearchSelectors';
 
 export interface UseJobSearchResult {
   // Filter state
@@ -35,25 +36,27 @@ export function useJobSearch(): UseJobSearchResult {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // ── Select slices from store ─────────────────────────────────────────────────
-  const search = useJobSearchStore((s) => s.search);
-  const categoryFilter = useJobSearchStore((s) => s.categoryFilter);
-  const page = useJobSearchStore((s) => s.page);
-  const pageSize = useJobSearchStore((s) => s.pageSize);
-  const scrollMode = useJobSearchStore((s) => s.scrollMode);
-  const jobs = useJobSearchStore((s) => s.jobs);
-  const scrollJobs = useJobSearchStore((s) => s.scrollJobs);
-  const categories = useJobSearchStore((s) => s.categories);
-  const meta = useJobSearchStore((s) => s.meta);
-  const loading = useJobSearchStore((s) => s.loading);
-  const loadingMore = useJobSearchStore((s) => s.loadingMore);
-  const error = useJobSearchStore((s) => s.error);
-  const fetchJobs = useJobSearchStore((s) => s.fetchJobs);
-  const setSearch = useJobSearchStore((s) => s.setSearch);
-  const setCategoryFilter = useJobSearchStore((s) => s.setCategoryFilter);
-  const setPage = useJobSearchStore((s) => s.setPage);
-  const setPageSize = useJobSearchStore((s) => s.setPageSize);
-  const setScrollMode = useJobSearchStore((s) => s.setScrollMode);
-  const loadMore = useJobSearchStore((s) => s.loadMore);
+  const {
+    search,
+    categoryFilter,
+    page,
+    pageSize,
+    scrollMode,
+    jobs,
+    scrollJobs,
+    categories,
+    meta,
+    loading,
+    loadingMore,
+    error,
+    fetchJobs,
+    setSearch,
+    setCategoryFilter,
+    setPage,
+    setPageSize,
+    setScrollMode,
+    loadMore,
+  } = useJobSearchSelectors();
 
   // ── Debounce lives here — it's a React concern, not store state ──────────────
   const debouncedSearch = useDebounce(search, 300);
