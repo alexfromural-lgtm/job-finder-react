@@ -4,6 +4,85 @@ A React 19 + TypeScript single-page application for the Job Finder platform. Fea
 
 ---
 
+## 🔀 Alternative State-Management Implementations
+
+This repository has **three branches**, each demonstrating a different global state-management strategy with the same feature set and UI.
+
+| Branch | State Management | Link |
+|--------|-----------------|------|
+| `main` (this branch) | React Context + local `useState` hooks | — |
+| `Zustand-Implementation` | Zustand stores | [View branch →](https://github.com/alexfromural-lgtm/job-finder-react/tree/Zustand-Implementation) |
+| `Redux-Implementation` | Redux Toolkit (slices + thunks) | [View branch →](https://github.com/alexfromural-lgtm/job-finder-react/tree/Redux-Implementation) |
+
+---
+
+### 📂 Structure Difference — `main` vs `Zustand-Implementation`
+
+The Zustand branch replaces `src/context/` with a dedicated `src/store/` directory containing modular Zustand stores. The hooks layer becomes a thin orchestration wrapper instead of owning state directly.
+
+```diff
+ src/
+-├── context/
+-│   └── AuthContext.tsx          # React Context — user state, session restore, signup actions
++├── store/
++│   ├── useAuthStore/
++│   │   ├── index.ts             # Re-exports the composed Zustand auth store
++│   │   ├── authState.ts         # AuthState interface + initial state
++│   │   ├── authActions.ts       # login, logout, signup*, getMe actions
++│   │   └── authStore.ts         # create() call — wires state + actions
++│   └── useJobSearchStore/
++│       ├── index.ts             # Re-exports the composed Zustand job-search store
++│       ├── jobSearchState.ts    # JobSearchState interface + initial state
++│       ├── jobSearchActions.ts  # setSearch, setCategory, fetchJobs… actions
++│       └── jobSearchStore.ts    # create() call — wires state + actions
+ ├── hooks/
+-│   ├── useJobSearch.ts          # Owns server-side search state (debounce, pagination, URL sync)
++│   ├── useJobSearch.ts          # Thin orchestrator: reads from useJobSearchStore, syncs URL
+     └── …                        # Generic primitives unchanged (useDebounce, usePagination, …)
+ └── …                            # All pages/components updated to call store selectors directly
+```
+
+> **Key difference:** Components that previously consumed `AuthContext` via `useContext` now call granular Zustand selectors (e.g. `useAuthStore(s => s.user)`), avoiding full-tree re-renders on unrelated state changes.
+
+---
+
+### 📂 Structure Difference — `main` vs `Redux-Implementation`
+
+The Redux branch builds on the Zustand branch's module layout but replaces Zustand with Redux Toolkit. It introduces a central store, typed slices, async thunks, and selector files.
+
+```diff
+ src/
+-├── context/
+-│   └── AuthContext.tsx          # React Context — user state, session restore, signup actions
++├── store/
++│   ├── store.ts                 # configureStore() — combines all slice reducers; exports
++│   │                            #   RootState and AppDispatch types
++│   ├── slices/
++│   │   ├── authSlice/
++│   │   │   ├── index.ts         # Re-exports reducer + actions + thunks
++│   │   │   ├── authTypes.ts     # AuthState interface
++│   │   │   ├── authThunks.ts    # createAsyncThunk — loginThunk, logoutThunk, getMeThunk, …
++│   │   │   └── authSlice.ts     # createSlice() — reducers, extraReducers for thunks
++│   │   └── jobSearchSlice/
++│   │       ├── index.ts         # Re-exports reducer + actions + thunks
++│   │       ├── jobSearchTypes.ts  # JobSearchState interface
++│   │       ├── jobSearchThunks.ts # createAsyncThunk — fetchJobsThunk
++│   │       └── jobSearchSlice.ts  # createSlice() — reducers, extraReducers for thunks
++│   └── selectors/
++│       ├── authSelectors.ts     # Typed memoised selectors for auth state
++│       └── jobSearchSelectors.ts # Typed memoised selectors for job-search state
+ ├── hooks/
+-│   ├── useJobSearch.ts          # Owns server-side search state (debounce, pagination, URL sync)
++│   ├── useJobSearch.ts          # Dispatches fetchJobsThunk; reads state via selectors
+     └── …                        # Generic primitives unchanged (useDebounce, usePagination, …)
++├── main.tsx                     # Wraps <App /> in Redux <Provider store={store}>
+ └── …                            # All pages/components updated to useSelector / useDispatch
+```
+
+> **Key difference from Zustand branch:** State mutations go through dispatched actions and async thunks; components read state via typed selectors; the Redux DevTools extension gives full time-travel debugging.
+
+---
+
 ## 📸 Screenshots
 
 ### Landing Page
