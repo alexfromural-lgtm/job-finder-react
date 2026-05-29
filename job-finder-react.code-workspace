@@ -14,6 +14,9 @@
 		},
 		{
 			"path": "../job-finder-backend-python"
+		},
+		{
+			"path": "../../MindMetaphors"
 		}
 	],
 	"settings": {}
