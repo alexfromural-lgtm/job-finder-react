@@ -13,5 +13,4 @@ services:
 
 networks:
   job-network:
-    external: true
     name: job-finder-network
