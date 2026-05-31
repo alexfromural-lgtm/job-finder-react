@@ -9,9 +9,9 @@ services:
       - "8080:80"
     restart: unless-stopped
     networks:
-      - backend-network
+      - job-network
 
 networks:
-  backend-network:
+  job-network:
     external: true
-    name: job-finder-backend-node_job-network
+    name: job-finder-network
