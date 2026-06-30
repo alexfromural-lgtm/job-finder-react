@@ -408,7 +408,7 @@ For the Landing Page, `searchJobs()` additionally passes params server-side to `
 
 ### Prerequisites
 - Node.js 18+
-- The backend must be running on port 5002 (see [`../job-finder-backend-customized`](../job-finder-backend-customized))
+- The backend must be running on port 5002 (see [`https://github.com/alexfromural-lgtm/job-finder-backend-node`](https://github.com/alexfromural-lgtm/job-finder-backend-node))
 
 ### Install & run
 
@@ -503,4 +503,12 @@ interface QueueJobResponse {  // NEW
 
 ## 🔗 Backend
 
-API source: [`../job-finder-backend-customized`](../job-finder-backend-customized) — Express / Prisma / PostgreSQL running on **port 5002**.
+API source: [`https://github.com/alexfromural-lgtm/job-finder-backend-node`](https://github.com/alexfromural-lgtm/job-finder-backend-node) — Express / Prisma / PostgreSQL running on **port 5002**.
+
+
+Backend (Node.js) repo: https://github.com/alexfromural-lgtm/job-finder-backend-node
+Backend (Go) repo: https://github.com/alexfromural-lgtm/job-finder-backend-go
+Backend (Java) repo: https://github.com/alexfromural-lgtm/job-finder-backend-java
+Backend (Python) repo: https://github.com/alexfromural-lgtm/job-finder-backend-python
+Backend (C# .NET) repo: https://github.com/alexfromural-lgtm/job-finder-backend-csharp
+
