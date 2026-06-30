@@ -503,12 +503,13 @@ interface QueueJobResponse {  // NEW
 
 ## 🔗 Backend
 
-API source: [`https://github.com/alexfromural-lgtm/job-finder-backend-node`](https://github.com/alexfromural-lgtm/job-finder-backend-node) — Express / Prisma / PostgreSQL running on **port 5002**.
+Backend (Node.js) repo: [`https://github.com/alexfromural-lgtm/job-finder-backend-node`](https://github.com/alexfromural-lgtm/job-finder-backend-node) — Node.js / Express / TypeScript / Prisma / PostgreSQL — REST API with role-based access control, Zod request validation, fully containerized with Docker Compose running on **port 5002**.
 
+Backend (Go) repo: [`https://github.com/alexfromural-lgtm/job-finder-backend-go`](https://github.com/alexfromural-lgtm/job-finder-backend-go) — Go / chi / pgx / asynq / JWT / bcrypt / Redis — 100% wire-compatible rewrite of the Node.js backend; type-safe SQL via sqlc, background job queue with asynq, multi-stage Docker build, fully containerized with Docker Compose running on **port 5002**.
 
-Backend (Node.js) repo: https://github.com/alexfromural-lgtm/job-finder-backend-node
-Backend (Go) repo: https://github.com/alexfromural-lgtm/job-finder-backend-go
-Backend (Java) repo: https://github.com/alexfromural-lgtm/job-finder-backend-java
-Backend (Python) repo: https://github.com/alexfromural-lgtm/job-finder-backend-python
-Backend (C# .NET) repo: https://github.com/alexfromural-lgtm/job-finder-backend-csharp
+Backend (Java) repo: [`https://github.com/alexfromural-lgtm/job-finder-backend-java`](https://github.com/alexfromural-lgtm/job-finder-backend-java) — Java / Spring Boot / Spring Security / JPA / Hibernate / PostgreSQL / gRPC / JUnit 5 — 100% wire-compatible rewrite; dual-protocol REST (Tomcat) & gRPC (Netty) server; JWT auth (cookies & gRPC metadata via global JwtServerInterceptor), server-side streaming RPCs (ListJobs), OpenAPI/Swagger docs, Docker Compose running on **port 5002**.
+
+Backend (Python) repo: [`https://github.com/alexfromural-lgtm/job-finder-backend-python`]https://github.com/alexfromural-lgtm/job-finder-backend-python) — Python / FastAPI / SQLAlchemy 2 (async) / asyncpg / Alembic / Celery / Redis / Pydantic v2 / python-jose / passlib[bcrypt] / slowapi — 100% wire-compatible Python port; async ORM with Alembic migrations, Celery/Redis background job queue (mirrors Bull pattern), Pydantic v2 request validation, rate limiting via slowapi, HttpOnly cookie auth (JWT access + refresh tokens), auto-generated Swagger/ReDoc docs (disabled in production); fully containerized with Docker Compose (API + Celery worker + PostgreSQL + Redis + pgAdmin4) running on **port 5002**.
+
+Backend (C# .NET) repo: [`https://github.com/alexfromural-lgtm/job-finder-backend-csharp`](https://github.com/alexfromural-lgtm/job-finder-backend-csharp) — C# / .NET 9 / ASP.NET Core / EF Core 9 / Npgsql / FluentValidation / Redis / Docker Compose — 100% wire-compatible C# port; PostgreSQL integration via EF Core 9 Code-First migrations, custom Redis-backed background queue worker (IHostedService handling job creation/polling/retries with exponential back-off), FluentValidation, secure HTTP-only cookie JWT auth; fully containerized with Docker Compose running on **port 5002**.
 
