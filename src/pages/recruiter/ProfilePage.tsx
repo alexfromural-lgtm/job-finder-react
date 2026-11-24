@@ -1,14 +1,36 @@
+// ─── ProfilePage.tsx (Recruiter) ─────────────────────────────────────────────
+//
+// PURPOSE:
+//   Edit the recruiter's company profile: company name, industry, website,
+//   and description.  Uses the same view/edit pattern as the job seeker profile
+//   but simpler (no skills section, no sub-components — all in one file).
+//
+// DESIGN PATTERN:
+//   "In-file FieldRow" — RecruiterProfile fields are simpler and fewer than
+//   the job seeker's profile, so a local FieldRow component is defined in this
+//   file rather than importing from a shared module.  This keeps the import
+//   count low and the component self-contained.
+//
+//   "Triple state": profile (server truth), form (editable draft), editing flag.
+//   On Cancel: form is reset from profile.
+//   On Save: API response updates both profile and form.
+//
+// USAGE:
+//   Route: /profile/recruiter (protected, RECRUITER only)
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { useState, useEffect } from 'react';
 import { getRecruiterProfile, updateRecruiterProfile } from '../../api/profile.api';
 import type { RecruiterProfile } from '../../types';
 import Button from '../../components/ui/Button';
 
-// ─── Field rows ──────────────────────────────────────────────────────────────
+// ─── Local FieldRow (same pattern as job seeker's, with an added `required` prop) ──
+// Defined here because it's specific to this file — no need to export it.
 interface FieldRowProps {
   label: string;
   value?: string;
   editing: boolean;
-  required?: boolean;
+  required?: boolean;    // Extra: shows a red * and passes required to the input
   placeholder?: string;
   name: string;
   onChange: (name: string, value: string) => void;
@@ -27,9 +49,12 @@ function FieldRow({
 }: FieldRowProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+      {/* Label with optional red asterisk for required fields */}
       <label className="input-label" htmlFor={`profile-field-${name}`}>
         {label} {required && <span style={{ color: 'var(--color-danger)' }}>*</span>}
       </label>
+
+      {/* Three-way conditional: editing? (multiline? textarea : input) : <p> */}
       {editing ? (
         multiline ? (
           <textarea
@@ -51,6 +76,7 @@ function FieldRow({
           />
         )
       ) : (
+        // View mode: styled paragraph with bottom border
         <p
           style={{
             margin: 0,
@@ -67,22 +93,26 @@ function FieldRow({
   );
 }
 
-// ─── Main page ───────────────────────────────────────────────────────────────
+// ─── Main page component ──────────────────────────────────────────────────────
 export default function RecruiterProfilePage() {
-  const [profile, setProfile] = useState<RecruiterProfile | null>(null);
-  const [form, setForm] = useState<Partial<RecruiterProfile>>({});
+  // ── Triple state ──────────────────────────────────────────────────────
+  const [profile, setProfile] = useState<RecruiterProfile | null>(null); // Server truth
+  const [form, setForm] = useState<Partial<RecruiterProfile>>({}); // Editable draft
   const [editing, setEditing] = useState(false);
+
+  // ── UI state ─────────────────────────────────────────────────────────
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // ── Fetch profile ─────────────────────────────────────────────────────
   useEffect(() => {
     const controller = new AbortController();
     getRecruiterProfile(controller.signal)
       .then((p) => {
-        setProfile(p);
-        setForm(p);
+        setProfile(p);  // Store the server copy
+        setForm(p);     // Pre-populate the editable form with server data
       })
       .catch((err) => {
         if (err?.code === 'ERR_CANCELED') return;
@@ -92,11 +122,17 @@ export default function RecruiterProfilePage() {
     return () => controller.abort();
   }, []);
 
+  // ── Generic field updater ─────────────────────────────────────────────
+  // Uses computed property key: [name] dynamically sets the field.
+  // Example: handleChange('companyName', 'Acme')
+  //   → setForm(prev => ({ ...prev, companyName: 'Acme' }))
   const handleChange = (name: string, value: string) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ── Save handler ──────────────────────────────────────────────────────
   const handleSave = async () => {
+    // Client-side validation: company name is required
     if (!form.companyName?.trim()) {
       setError('Company name is required.');
       return;
@@ -104,17 +140,19 @@ export default function RecruiterProfilePage() {
     setSaving(true);
     setError('');
     try {
+      // PATCH /profile/recruiter — only send the updatable fields
       const updated = await updateRecruiterProfile({
         companyName: form.companyName,
         companyWebsite: form.companyWebsite,
         description: form.description,
         industry: form.industry,
       });
+      // Update both `profile` and `form` with the server's response
       setProfile(updated);
       setForm(updated);
       setEditing(false);
       setSuccess('Profile updated successfully! ✅');
-      setTimeout(() => setSuccess(''), 3500);
+      setTimeout(() => setSuccess(''), 3500); // Auto-clear after 3.5 seconds
     } catch {
       setError('Failed to save changes. Please try again.');
     } finally {
@@ -122,12 +160,15 @@ export default function RecruiterProfilePage() {
     }
   };
 
+  // ── Cancel handler ────────────────────────────────────────────────────
+  // Discard all edits by resetting form to the last known server state.
   const handleCancel = () => {
-    setForm(profile ?? {});
+    setForm(profile ?? {}); // profile ?? {} handles the unlikely null case
     setEditing(false);
     setError('');
   };
 
+  // ── Loading state ─────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="page hero-gradient">
@@ -138,10 +179,13 @@ export default function RecruiterProfilePage() {
     );
   }
 
+  // ── Render ────────────────────────────────────────────────────────────
   return (
     <div className="page hero-gradient">
+      {/* maxWidth: 720 — readable form width */}
       <div className="container" style={{ maxWidth: 720 }}>
-        {/* Header card */}
+
+        {/* ── Identity card: avatar + name + badge + edit button ────── */}
         <div
           className="glass-strong"
           style={{
@@ -155,7 +199,7 @@ export default function RecruiterProfilePage() {
             animation: 'slideUp 0.3s ease',
           }}
         >
-          {/* Avatar */}
+          {/* Company avatar circle — gradient + building emoji */}
           <div
             style={{
               width: 72,
@@ -171,13 +215,15 @@ export default function RecruiterProfilePage() {
           >
             🏢
           </div>
+
+          {/* Name + email + role badge */}
           <div style={{ flex: 1, minWidth: 0 }}>
             <h1
               style={{
                 margin: '0 0 0.25rem',
                 fontSize: '1.6rem',
                 fontWeight: 800,
-                wordBreak: 'break-word',
+                wordBreak: 'break-word', // Prevents long names overflowing
               }}
             >
               {profile?.user?.name ?? 'Recruiter'}
@@ -186,9 +232,12 @@ export default function RecruiterProfilePage() {
               {profile?.user?.email}
             </p>
             <div style={{ marginTop: '0.5rem' }}>
+              {/* badge badge-blue is a global CSS class: blue-tinted pill */}
               <span className="badge badge-blue">RECRUITER</span>
             </div>
           </div>
+
+          {/* Edit button — hidden while already editing */}
           {!editing && (
             <Button id="profile-edit-btn" variant="secondary" onClick={() => setEditing(true)}>
               ✏️ Edit Profile
@@ -196,7 +245,7 @@ export default function RecruiterProfilePage() {
           )}
         </div>
 
-        {/* Alerts */}
+        {/* ── Alerts ────────────────────────────────────────────────── */}
         {success && (
           <div className="alert alert-success" style={{ marginBottom: '1.25rem' }}>
             {success}
@@ -208,7 +257,7 @@ export default function RecruiterProfilePage() {
           </div>
         )}
 
-        {/* Profile card */}
+        {/* ── Company info form card ─────────────────────────────────── */}
         <div
           className="glass"
           style={{
@@ -222,6 +271,7 @@ export default function RecruiterProfilePage() {
         >
           <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>Company Information</h2>
 
+          {/* Company Name — required field (shows red *) */}
           <FieldRow
             label="Company Name"
             name="companyName"
@@ -247,6 +297,7 @@ export default function RecruiterProfilePage() {
             placeholder="https://yourcompany.com"
             onChange={handleChange}
           />
+          {/* Description — multi-line textarea in edit mode */}
           <FieldRow
             label="Company Description"
             name="description"
@@ -257,6 +308,7 @@ export default function RecruiterProfilePage() {
             multiline
           />
 
+          {/* Save + Cancel buttons — only shown in edit mode */}
           {editing && (
             <div
               style={{
